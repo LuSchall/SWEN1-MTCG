@@ -1,5 +1,6 @@
 package at.technikum.server;
 
+import at.technikum.server.http.HttpMethod;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 import at.technikum.server.util.HttpMapper;
@@ -13,7 +14,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RequestHandler implements Runnable {
+    //curl print formatting variables START
+    private static int i= 0;
+    private static String currentMethod;
+    private static String previousMethod;
+    private static String currentRoute;
+    private static String previousRoute;
 
+    //curl print formatting variables END
     private BufferedReader in;
     private PrintWriter out;
 
@@ -41,6 +49,18 @@ public class RequestHandler implements Runnable {
         String httpRequest = getHttpStringFromStream(in);
 
         Request request = HttpMapper.toRequestObject(httpRequest);
+        //curl print formatting START
+        currentMethod = request.getMethod();
+        currentRoute = request.getRoute();
+        if (!currentRoute.equals(previousRoute)) {
+            i++;
+        }
+        previousMethod = currentMethod;
+        previousRoute = currentRoute;
+        //curl print formatting END
+        /*just in case I wonder about the curl requests again...*/
+        System.out.println(i + ")\n" + httpRequest + "\n------------------------------------------------------");
+
         Response response = app.handle(request);
 
         out = new PrintWriter(client.getOutputStream(), true);
@@ -61,6 +81,7 @@ public class RequestHandler implements Runnable {
                     .append(inputLine)
                     .append(System.lineSeparator());
         }
+
 
         String httpRequest = builder.toString();
 

@@ -18,10 +18,10 @@ public class Injector {
      */
     public List<Controller> createController() {
         List<Controller> controllerList = new ArrayList<>();
-
-        TaskRepository taskRepository = new DatabaseTaskRepository();
-        TaskService taskService = new TaskService(taskRepository);
-        controllerList.add(new TaskController(taskService));
+        //### Example for the needed things for injection work properly
+        //TaskRepository taskRepository = new DatabaseTaskRepository();
+        //TaskService taskService = new TaskService(taskRepository);
+        //controllerList.add(new TaskController(taskService));
 
         controllerList.add(new TimeoutController());
 
