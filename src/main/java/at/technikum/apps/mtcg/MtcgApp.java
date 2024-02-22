@@ -7,16 +7,17 @@ import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
-
+import at.technikum.apps.mtcg.Injector;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MtcgApp implements ServerApplication {
 
-    private List<Controller> controllers = new ArrayList<>();
+    private List<Controller> controllers;
 
     public MtcgApp() {
-        controllers.add(new UserController());
+        Injector injector = new Injector();
+        this.controllers = injector.createControllerList();
     }
 
     @Override

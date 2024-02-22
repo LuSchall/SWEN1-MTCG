@@ -16,10 +16,10 @@ import java.util.regex.Pattern;
 public class RequestHandler implements Runnable {
     //curl print formatting variables START
     private static int i= 0;
-    private static String currentMethod;
-    private static String previousMethod;
-    private static String currentRoute;
-    private static String previousRoute;
+    //private static String currentMethod;
+    //private static String previousMethod;
+    //private static String currentRoute;
+    //private static String previousRoute;
 
     //curl print formatting variables END
     private BufferedReader in;
@@ -50,13 +50,13 @@ public class RequestHandler implements Runnable {
 
         Request request = HttpMapper.toRequestObject(httpRequest);
         //curl print formatting START
-        currentMethod = request.getMethod();
-        currentRoute = request.getRoute();
-        if (!currentRoute.equals(previousRoute)) {
+        //currentMethod = request.getMethod();
+        //currentRoute = request.getRoute();
+        //if (!currentRoute.equals(previousRoute)) {
             i++;
-        }
-        previousMethod = currentMethod;
-        previousRoute = currentRoute;
+        //}
+        //previousMethod = currentMethod;
+        //previousRoute = currentRoute;
         //curl print formatting END
         /*just in case I wonder about the curl requests again...*/
         System.out.println(i + ")\n" + httpRequest + "\n------------------------------------------------------");

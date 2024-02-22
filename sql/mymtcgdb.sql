@@ -3,13 +3,12 @@
 
 --\c mymtcgdb;
 
---### I generally don't trust "default case-insensitive"!
+--### I generally don't trust "default case-insensitive"
 
 DROP TABLE users;
 
 CREATE TABLE IF NOT EXISTS users (
-    Id VARCHAR(255) PRIMARY KEY,
-    Username VARCHAR(255) NOT NULL UNIQUE,
+    Username VARCHAR(255) PRIMARY KEY,
     Password VARCHAR(255) NOT NULL,
     Points INT DEFAULT 100,
     Elo INT DEFAULT 20,
