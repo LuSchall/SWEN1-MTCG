@@ -27,15 +27,22 @@ public class MtcgApp implements ServerApplication {
             if (!controller.supports(request.getRoute())) {
                 continue;
             }
+            try {
+                return controller.handle(request);
+            } catch (Exception e) {
 
-            return controller.handle(request);
+                Response response = new Response();
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("Internal Error for request " + request.getMethod() + " " + request.getRoute());
+
+                return response;
+            }
         }
-
         Response response = new Response();
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setContentType(HttpContentType.TEXT_PLAIN);
         response.setBody("Route " + request.getRoute() + " not found in app!");
-
         return response;
     }
 }

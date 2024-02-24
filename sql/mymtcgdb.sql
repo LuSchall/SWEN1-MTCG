@@ -5,14 +5,14 @@
 
 --### "default case-insensitive" but still...
 
-DROP TABLE users;
+DROP TABLE users, cards, packages;
 
 CREATE TABLE IF NOT EXISTS users (
     Username VARCHAR(255) PRIMARY KEY,
     Password VARCHAR(255) NOT NULL,
     Points INT DEFAULT 100,
     Elo INT DEFAULT 20,
-    Name VARCHAR(255) DEFAULT NULL,
+    u_Name VARCHAR(255) DEFAULT NULL,
     Bio VARCHAR(255) DEFAULT NULL,
     Image VARCHAR(255) DEFAULT NULL
 );
@@ -34,12 +34,30 @@ CREATE TYPE CardType AS ENUM (
     'Kraken',   -- wins vs SPELLS
     'Elve',     -- IF FIRE wins vs DRAGONS
     'Troll'
-    );
+);
 
 CREATE TABLE IF NOT EXISTS cards (
-    Id VARCHAR(255) PRIMARY KEY,
+    c_Id VARCHAR(255) PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
     CardElement CardElement NOT NULL,
     CardType CardType NOT NULL,
-    Damage INT NOT NULL
+    Damage INT NOT NULL,
+    Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL
+);
+
+CREATE TABLE IF NOT EXISTS packages (
+    p_Id SERIAL PRIMARY KEY,
+    p_cardId1 VARCHAR(255) REFERENCES cards(c_Id),
+    p_cardId2 VARCHAR(255) REFERENCES cards(c_Id),
+    p_cardId3 VARCHAR(255) REFERENCES cards(c_Id),
+    p_cardId4 VARCHAR(255) REFERENCES cards(c_Id),
+    p_cardId5 VARCHAR(255) REFERENCES cards(c_Id)
+);
+
+CREATE TABLE IF NOT EXISTS decks (
+    Owner VARCHAR(255) REFERENCES users(Username) PRIMARY KEY,
+    d_cardId1 VARCHAR(255) references cards(c_Id),
+    d_cardId2 VARCHAR(255) references cards(c_Id),
+    d_cardId3 VARCHAR(255) references cards(c_Id),
+    d_cardId4 VARCHAR(255) references cards(c_Id)
 );

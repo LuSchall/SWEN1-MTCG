@@ -7,5 +7,5 @@ public interface Controller {
 
     boolean supports(String route);
 
-    Response handle(Request request);
+    Response handle(Request request)throws Exception;
 }

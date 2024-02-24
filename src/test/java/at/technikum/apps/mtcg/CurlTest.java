@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CurlTest {
-
-    MtcgApp mtcgApp = new MtcgApp();
-
-
     /*
     Just an idea, maybe an alternative to the curl script
+
+    MtcgApp mtcgApp = new MtcgApp();
 
     @Test
     void createUser() {
@@ -27,6 +25,8 @@ public class CurlTest {
     }
     curl -X POST http://localhost:10001/users --header "Content-Type: application/json" -d "{\"Username\":\"kienboec\", \"Password\":\"daniel\"}"
      */
+    MtcgApp mtcgApp = new MtcgApp();
+
     @Test
     void ServerIntegrationTest1of77() {
 
