@@ -1,8 +1,10 @@
 package at.technikum.apps.mtcg;
 
+import at.technikum.apps.mtcg.controller.SessionController;
 import at.technikum.apps.mtcg.controller.UserController;
 import at.technikum.apps.mtcg.repository.UserRepository;
 import at.technikum.apps.mtcg.repository.UserRepositoryInterface;
+import at.technikum.apps.mtcg.service.SessionService;
 import at.technikum.apps.mtcg.service.UserService;
 import at.technikum.apps.mtcg.controller.Controller;
 
@@ -22,6 +24,9 @@ public class Injector {
         UserRepositoryInterface userRepository = new UserRepository();
         UserService userService = new UserService(userRepository);
         controllerList.add(new UserController(userService));
+        //todo: add session repo interface
+        SessionService sessionService = new SessionService();
+        controllerList.add(new SessionController(sessionService));
 
 
         return controllerList;

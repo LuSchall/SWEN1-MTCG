@@ -1,6 +1,16 @@
 package at.technikum.server.http;
 
 public class Request {
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    //TOKENS
+    private String token;
 
     // GET, POST, PUT, DELETE
     private String method;
