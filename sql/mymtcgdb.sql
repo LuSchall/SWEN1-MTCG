@@ -10,8 +10,8 @@ DROP TABLE users, cards, packages;
 CREATE TABLE IF NOT EXISTS users (
     Username VARCHAR(255) PRIMARY KEY,
     Password VARCHAR(255) NOT NULL,
-    Points INT DEFAULT 100,
-    Elo INT DEFAULT 20,
+    Elo INT DEFAULT 100,
+    Coins INT DEFAULT 20,
     u_Name VARCHAR(255) DEFAULT NULL,
     Bio VARCHAR(255) DEFAULT NULL,
     Image VARCHAR(255) DEFAULT NULL
@@ -60,4 +60,12 @@ CREATE TABLE IF NOT EXISTS decks (
     d_cardId2 VARCHAR(255) references cards(c_Id),
     d_cardId3 VARCHAR(255) references cards(c_Id),
     d_cardId4 VARCHAR(255) references cards(c_Id)
+);
+
+-- ### GAME related
+-- stats(from user(name, elo), wins, losses);
+CREATE TABLE IF NOT EXISTS stats (
+    Owner VARCHAR(255) REFERENCES users(Username) PRIMARY KEY,
+    Wins INT DEFAULT 0,
+    Losses INT DEFAULT 0
 );

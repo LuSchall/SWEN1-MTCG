@@ -34,7 +34,6 @@ public class UserController implements Controller {
         //routing for the specific users
         String[] routeParts = request.getRoute().split("/");
         String username = routeParts[2];
-        System.out.println(username);
         //TODO: check in DB if user exists
         //TODO: check access TOKEN
         switch (request.getMethod()) {
@@ -59,7 +58,7 @@ public class UserController implements Controller {
         Response response = new Response();
         response.setStatus(HttpStatus.OK);
         response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("registration unhandled");
+        response.setBody("registration unhandled / not implemented");
         return response;
     }
 
@@ -67,13 +66,15 @@ public class UserController implements Controller {
         Response response = new Response();
         response.setStatus(HttpStatus.OK);
         response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("grabbing of User Profile unhandled");
+        response.setBody("grabbing of User Profile unhandled / not implemented");
         return response;
-    }public Response updateUserProfile(String username, Request request) {
+    }
+
+    public Response updateUserProfile(String username, Request request) {
         Response response = new Response();
         response.setStatus(HttpStatus.OK);
         response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("update of User Profile unhandled");
+        response.setBody("update of User Profile unhandled / not implemented");
         return response;
     }
 
