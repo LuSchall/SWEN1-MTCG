@@ -1,14 +1,12 @@
 package at.technikum.apps.mtcg;
 
 import at.technikum.apps.mtcg.controller.Controller;
-import at.technikum.apps.mtcg.controller.UserController;
 import at.technikum.server.ServerApplication;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
-import at.technikum.apps.mtcg.Injector;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class MtcgApp implements ServerApplication {
@@ -43,7 +41,7 @@ public class MtcgApp implements ServerApplication {
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setContentType(HttpContentType.TEXT_PLAIN);
         response.setBody("Route " + request.getRoute() + " not found in app!");
-        System.out.println(request.getToken());
+        System.out.println(request.getAuthorization());
         return response;
     }
 }

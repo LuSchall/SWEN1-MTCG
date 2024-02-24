@@ -1,16 +1,17 @@
 package at.technikum.server.http;
 
 public class Request {
-    public String getToken() {
-        return token;
+    public String getAuthorization() {
+        return authorization;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAuthorization(String authorization) {
+        this.authorization = authorization;
     }
 
     //TOKENS
-    private String token;
+    private String authorization;
+
 
     // GET, POST, PUT, DELETE
     private String method;
