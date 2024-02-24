@@ -25,8 +25,9 @@ public class Injector {
         UserService userService = new UserService(userRepository);
         controllerList.add(new UserController(userService));
         //todo: add session repo interface
-        SessionService sessionService = new SessionService();
-        controllerList.add(new SessionController(sessionService));
+
+        //SessionService sessionService = new SessionService();
+        //controllerList.add(new SessionController(sessionService));
 
 
         return controllerList;

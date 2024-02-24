@@ -41,7 +41,7 @@ public class MtcgApp implements ServerApplication {
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setContentType(HttpContentType.TEXT_PLAIN);
         response.setBody("Route " + request.getRoute() + " not found in app!");
-        System.out.println(request.getAuthorization());
+        //System.out.println(request.getAuthorization());
         return response;
     }
 }

@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.entityJson;
 
+import at.technikum.apps.mtcg.entity.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 public class UserJson {
     @JsonProperty("Username")
@@ -14,5 +15,9 @@ public class UserJson {
 
     public String getPassword() {
         return password;
+    }
+
+    public User toUser() {
+        return new User(username, password);
     }
 }

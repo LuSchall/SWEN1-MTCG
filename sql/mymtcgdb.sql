@@ -5,7 +5,8 @@
 
 --### "default case-insensitive" but still...
 
-DROP TABLE users, cards, packages;
+DROP TABLE users, cards, packages, decks, stats;
+DROP TYPE CardElement, CardType;
 
 CREATE TABLE IF NOT EXISTS users (
     Username VARCHAR(255) PRIMARY KEY,
