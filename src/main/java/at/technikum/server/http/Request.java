@@ -1,16 +1,16 @@
 package at.technikum.server.http;
 
+import java.util.Optional;
+
 public class Request {
-    public String getAuthorization() {
+    public Optional<String> getAuthorization() {
         return authorization;
     }
-
     public void setAuthorization(String authorization) {
-        this.authorization = authorization;
+        this.authorization = Optional.ofNullable(authorization);
     }
-
     //TOKENS
-    private String authorization;
+    private Optional<String> authorization;
 
 
     // GET, POST, PUT, DELETE

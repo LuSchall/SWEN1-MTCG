@@ -1,7 +1,10 @@
 package at.technikum.apps.mtcg.service;
 
 import at.technikum.apps.mtcg.entity.User;
+import at.technikum.apps.mtcg.entityJson.UserJson;
 import at.technikum.apps.mtcg.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 
@@ -19,5 +22,15 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public UserJson getUserJsonFromBody(String body) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        UserJson userJson;
+        try {
+            userJson = objectMapper.readValue(body, UserJson.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return userJson;
+    }
 
 }

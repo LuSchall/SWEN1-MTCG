@@ -20,7 +20,7 @@ public class MtcgApp implements ServerApplication {
 
     @Override
     public Response handle(Request request) {
-
+        //System.out.println(request.getAuthorization());
         for (Controller controller: controllers) {
             if (!controller.supports(request.getRoute())) {
                 continue;
@@ -41,7 +41,7 @@ public class MtcgApp implements ServerApplication {
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setContentType(HttpContentType.TEXT_PLAIN);
         response.setBody("Route " + request.getRoute() + " not found in app!");
-        //System.out.println(request.getAuthorization());
+
         return response;
     }
 }

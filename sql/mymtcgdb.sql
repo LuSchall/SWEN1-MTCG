@@ -40,10 +40,10 @@ CREATE TYPE CardType AS ENUM (
 CREATE TABLE IF NOT EXISTS cards (
     c_Id VARCHAR(255) PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
-    CardElement CardElement NOT NULL,
-    CardType CardType NOT NULL,
     Damage INT NOT NULL,
-    Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL
+    Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL,
+    CardElement CardElement NOT NULL,
+    CardType CardType NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS packages (

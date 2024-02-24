@@ -22,13 +22,20 @@ public class CardController implements Controller{
     }
 
     @Override
-    public Response handle(Request request) throws Exception {
+    public Response handle(Request request) {
+        //todo: continue here after session was implemented
+        /*
+        SessionService sessionService = new SessionService()
+        switch (request.getMethod()) {
+            case "GET": return showOwnersCards();
+        }
+
+         */
         Response response = new Response();
         response.setStatus(HttpStatus.OK);
         response.setContentType(HttpContentType.TEXT_PLAIN);
         response.setBody("card controller unhandled");
         return response;
-
     }
 
 

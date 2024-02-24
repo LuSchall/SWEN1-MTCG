@@ -11,6 +11,8 @@ import at.technikum.server.http.HttpMethod;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Optional;
+
 public class UserController implements Controller {
     private final UserService userService;
     private static final String userRoute = "/users";
@@ -64,13 +66,7 @@ public class UserController implements Controller {
     }
 
     public Response register(Request request) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        UserJson userJson;
-        try {
-            userJson = objectMapper.readValue(request.getBody(), UserJson.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        UserJson userJson = userService.getUserJsonFromBody(request.getBody());
         User user = userJson.toUser();
         Response response = new Response();
         if (userService.findByUsername(user.getUsername()).isEmpty()) {

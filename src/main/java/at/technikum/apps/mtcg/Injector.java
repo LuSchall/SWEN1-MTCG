@@ -1,12 +1,12 @@
 package at.technikum.apps.mtcg;
 
-import at.technikum.apps.mtcg.controller.SessionController;
-import at.technikum.apps.mtcg.controller.UserController;
+import at.technikum.apps.mtcg.controller.*;
 import at.technikum.apps.mtcg.repository.DatabaseUserRepository;
 import at.technikum.apps.mtcg.repository.UserRepository;
+import at.technikum.apps.mtcg.service.CardService;
+import at.technikum.apps.mtcg.service.PackageService;
 import at.technikum.apps.mtcg.service.SessionService;
 import at.technikum.apps.mtcg.service.UserService;
-import at.technikum.apps.mtcg.controller.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,17 @@ public class Injector {
         UserRepository userRepository = new DatabaseUserRepository();
         UserService userService = new UserService(userRepository);
         controllerList.add(new UserController(userService));
-        //todo: add session repo interface
+        //same user repo no problem??? same same but different!
+        SessionService sessionService = new SessionService(userRepository);
+        controllerList.add(new SessionController(sessionService));
+        //todo: add card repo
+        //CardService cardService = new CardService();
+        //controllerList.add(new CardController(cardService));
 
-        //SessionService sessionService = new SessionService();
-        //controllerList.add(new SessionController(sessionService));
+        //PackageService packageService = new PackageService();
+        //controllerList.add(new PackageController(packageService));
+
+
 
 
         return controllerList;
