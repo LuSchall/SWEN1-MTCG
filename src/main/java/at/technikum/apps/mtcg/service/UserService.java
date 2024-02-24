@@ -1,10 +1,10 @@
 package at.technikum.apps.mtcg.service;
 
-import at.technikum.apps.mtcg.repository.UserRepositoryInterface;
+import at.technikum.apps.mtcg.repository.UserRepository;
 
 public class UserService {
-    private final UserRepositoryInterface userRepository;
-    public UserService(UserRepositoryInterface userRepository) {
+    private final UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
