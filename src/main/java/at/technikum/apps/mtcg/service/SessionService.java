@@ -9,19 +9,17 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SessionService {
-    private final UserRepository userRepository;
     private final UserService userService;
 
     private Map<String, Optional<String>> tokens = new HashMap<>();
 
-    public SessionService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.userService = new UserService(userRepository);
+    public SessionService(UserService userService) {
+        this.userService = userService;
     }
 
     public Optional<String> login(String body) {
         UserJson user = userService.getUserJsonFromBody(body);
-        Optional<User> registeredUser = userRepository.findByUsername(user.getUsername());
+        Optional<User> registeredUser = userService.findByUsername(user.getUsername());
         if (registeredUser.isPresent() && registeredUser.get().getPassword().equals(user.getPassword())) {
             Optional<String> newToken = generateBearerToken(user.getUsername());
             tokens.put(user.getUsername(), newToken);

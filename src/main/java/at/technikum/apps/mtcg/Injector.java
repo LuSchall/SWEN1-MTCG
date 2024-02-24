@@ -24,8 +24,8 @@ public class Injector {
         UserRepository userRepository = new DatabaseUserRepository();
         UserService userService = new UserService(userRepository);
         controllerList.add(new UserController(userService));
-        //same user repo no problem??? same same but different!
-        SessionService sessionService = new SessionService(userRepository);
+        //session needs user data - no session repo - sessions are not persistent!
+        SessionService sessionService = new SessionService(userService);
         controllerList.add(new SessionController(sessionService));
         //todo: add card repo
         //CardService cardService = new CardService();
