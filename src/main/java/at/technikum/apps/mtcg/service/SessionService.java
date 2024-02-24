@@ -48,6 +48,6 @@ public class SessionService {
         token = token.substring(7, length - 10);
                 //012345    0123456789
                 //Bearer    -mtcgToken
-        return userRepository.findByUsername(token);
+        return userService.findByUsername(token);
     }
 }
