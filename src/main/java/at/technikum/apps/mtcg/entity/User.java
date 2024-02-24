@@ -21,7 +21,7 @@ public class User {
         this.image = null;
     }
 
-    public User(String username, String password, String coins, String elo, String name, String bio, String image) {
+    public User(String username, String password, String elo, String coins, String name, String bio, String image) {
         this.username = username;
         this.password = password;
         this.coins = coins;
