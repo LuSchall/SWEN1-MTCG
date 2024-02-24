@@ -50,16 +50,18 @@ public class RequestHandler implements Runnable {
 
         Request request = HttpMapper.toRequestObject(httpRequest);
         //curl print formatting START
-        //currentMethod = request.getMethod();
-        //currentRoute = request.getRoute();
-        //if (!currentRoute.equals(previousRoute)) {
-            i++;
-        //}
-        //previousMethod = currentMethod;
-        //previousRoute = currentRoute;
+        /*
+        currentMethod = request.getMethod();
+        currentRoute = request.getRoute();
+        if (!currentRoute.equals(previousRoute)) {
+
+        }
+        previousMethod = currentMethod;
+        previousRoute = currentRoute;
+        */
         //curl print formatting END
         /*just in case I wonder about the curl requests again...*/
-        System.out.println(i + ")\n" + httpRequest + "\n------------------------------------------------------");
+        //i++; System.out.println(i + ")\n" + httpRequest + "\n------------------------------------------------------");
 
         Response response = app.handle(request);
 
