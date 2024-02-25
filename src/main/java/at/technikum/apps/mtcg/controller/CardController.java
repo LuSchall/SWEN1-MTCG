@@ -34,9 +34,11 @@ public class CardController implements Controller {
         String username = sessionService.getUserFromToken(request).get(); //token got cecked so get is OK...
         if(cardService.userHasCards(username)) {
             String body = cardService.getCardsOf(username);
+            //System.out.println(body);
             response.setStatus(HttpStatus.OK);
             response.setContentType(HttpContentType.APPLICATION_JSON);
             response.setBody(body);
+            return response;
         }
         response.setStatus(HttpStatus.NO_CONTENT);
         response.setContentType(HttpContentType.TEXT_PLAIN);
