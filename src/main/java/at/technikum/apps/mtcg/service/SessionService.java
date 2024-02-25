@@ -53,6 +53,7 @@ public class SessionService {
         return userService.getUserByUsername(token);
     }
     //RETURNS OPTIONAL.EMPTY IF TOKEN IS VALID!!!!!
+    //for Login - checks if given name and "name from token" match
     public Optional<Response> tokenInvalidResponse(String username, Request request) {
         Response response = new Response();
         response.setStatus(HttpStatus.UNAUTHORIZED);
@@ -72,6 +73,7 @@ public class SessionService {
         }
         return Optional.of(response);
     }
+    //for confirming running sessions
     public Optional<Response> tokenInvalidResponse(Request request) {
         Response response = new Response();
         response.setStatus(HttpStatus.UNAUTHORIZED);

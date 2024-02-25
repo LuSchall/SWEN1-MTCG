@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS cards (
     Name VARCHAR(255) NOT NULL,
     Damage INT NOT NULL,
     Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL,
-    CardElement CardElement NOT NULL,
-    CardType CardType NOT NULL
+    CardElement CardElement DEFAULT NULL,
+    CardType CardType DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS packages (
