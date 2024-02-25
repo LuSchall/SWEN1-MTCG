@@ -3,6 +3,7 @@ package at.technikum.apps.mtcg.service;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.entityJson.UserJson;
 import at.technikum.apps.mtcg.entityJson.UserProfileJson;
+import at.technikum.apps.mtcg.entityJson.UserStatsJson;
 import at.technikum.apps.mtcg.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ public class UserService {
     public String getJsonUserProfileAsString(User user) {
         String profile;
         //System.out.println("1  USERNAME: "+user.getUsername());
-        UserProfileJson userProfile = user.getUserProfileJson();
+        UserProfileJson userProfile = getUserProfileJson(user);
         //System.out.println("2  PROFILE-JSON: "+userProfile.getName()+userProfile.getBio()+userProfile.getImage());
         try {
             profile = objectMapper.writeValueAsString(userProfile);
@@ -59,5 +60,35 @@ public class UserService {
         }
         userRepository.updateUserProfile(username, userProfile.getName(), userProfile.getBio(), userProfile.getImage());
     }
+
+    public String getStatsAsJsonString(String username) {
+        User user = getUserByUsername(username).get();
+        String stats;
+        UserStatsJson userStatsJson = getUserStatsJson(user);
+        try {
+            stats = objectMapper.writeValueAsString(userStatsJson);
+            //System.out.println("3  PROFILE-STRING: "+test);
+            return stats;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private UserProfileJson getUserProfileJson(User user) {
+        UserProfileJson profileJson = new UserProfileJson();
+        profileJson.setName(user.getProfileName());
+        profileJson.setBio(user.getBio());
+        profileJson.setImage(user.getImage());
+        return profileJson;
+    }
+    private UserStatsJson getUserStatsJson(User user) {
+        UserStatsJson statsJson = new UserStatsJson();
+        statsJson.setName(user.getProfileName());
+        statsJson.setElo(user.getElo());
+        statsJson.setWins(user.getWins());
+        statsJson.setLosses(user.getLosses());
+        return statsJson;
+    }
+
+
 
 }

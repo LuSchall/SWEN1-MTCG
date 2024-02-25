@@ -34,7 +34,9 @@ public class DatabaseUserRepository implements UserRepository {
                         rs.getInt("Coins"),
                         rs.getString("ProfileName"),
                         rs.getString("Bio"),
-                        rs.getString("Image")
+                        rs.getString("Image"),
+                        rs.getInt("Wins"),
+                        rs.getInt("Losses")
                 );
                 //System.out.println(user.getUsername());
                 return Optional.of(user);
@@ -52,10 +54,10 @@ public class DatabaseUserRepository implements UserRepository {
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(UPDATE_PROFILE_SQL);
         ) {
+            pstmt.setString(1, profileName);
+            pstmt.setString(2, bio);
+            pstmt.setString(3, image);
             pstmt.setString(4, username);
-            pstmt.setString(2, profileName);
-            pstmt.setString(3, bio);
-            pstmt.setString(1, image);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -2,10 +2,7 @@ package at.technikum.apps.mtcg;
 
 import at.technikum.apps.mtcg.controller.*;
 import at.technikum.apps.mtcg.repository.*;
-import at.technikum.apps.mtcg.service.CardService;
-import at.technikum.apps.mtcg.service.PackageService;
-import at.technikum.apps.mtcg.service.SessionService;
-import at.technikum.apps.mtcg.service.UserService;
+import at.technikum.apps.mtcg.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +29,9 @@ public class Injector {
         PackageRepository packageRepository = new DatabasePackageRepository();
         PackageService packageService = new PackageService(packageRepository, cardService);
         controllerList.add(new PackageController(packageService, sessionService));
+        //stat repo not needed i think
+        //StatService statService = new StatService(userService);
+        controllerList.add(new StatController(userService, sessionService));
 
 
 
