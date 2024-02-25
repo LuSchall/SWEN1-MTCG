@@ -23,10 +23,10 @@ public class Injector {
         List<Controller> controllerList = new ArrayList<>();
         UserRepository userRepository = new DatabaseUserRepository();
         UserService userService = new UserService(userRepository);
-        controllerList.add(new UserController(userService));
         //session needs user data - no session repo - sessions are not persistent!
         SessionService sessionService = new SessionService(userService);
         controllerList.add(new SessionController(sessionService));
+        controllerList.add(new UserController(userService, sessionService));
         //todo: add card repo
         //CardService cardService = new CardService();
         //controllerList.add(new CardController(cardService));

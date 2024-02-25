@@ -6,8 +6,10 @@ import java.util.Optional;
 public interface UserRepository {
     //saves the user in the db. if he already is does nothing.
     //after adding or confirming he is, returns true, else false.
-    boolean saveInDB(User user);
+    void saveInDB(User user);
     Optional<User> findByUsername(String username);
+
+    void updateUserProfile(String username, String profileName, String bio, String image);
 
 
 

@@ -2,22 +2,23 @@ package at.technikum.apps.mtcg.controller;
 
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.entityJson.UserJson;
+import at.technikum.apps.mtcg.entityJson.UserProfileJson;
+import at.technikum.apps.mtcg.service.SessionService;
 import at.technikum.apps.mtcg.service.UserService;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
-import at.technikum.server.http.HttpMethod;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 
 public class UserController implements Controller {
     private final UserService userService;
+    private final SessionService sessionService;
     private static final String userRoute = "/users";
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SessionService sessionService) {
         this.userService = userService;
+        this.sessionService = sessionService;
     }
     @Override
     public boolean supports(String route) {
@@ -40,7 +41,7 @@ public class UserController implements Controller {
         String[] routeParts = request.getRoute().split("/");
         String username = routeParts[2];
         // check in DB if user exists
-        if (userService.findByUsername(username).isEmpty()) {
+        if (userService.getUserByUsername(username).isEmpty()) {
             Response response = new Response();
             response.setStatus(HttpStatus.NOT_FOUND);
             response.setContentType(HttpContentType.TEXT_PLAIN);
@@ -69,7 +70,7 @@ public class UserController implements Controller {
         UserJson userJson = userService.getUserJsonFromBody(request.getBody());
         User user = userJson.toUser();
         Response response = new Response();
-        if (userService.findByUsername(user.getUsername()).isEmpty()) {
+        if (userService.getUserByUsername(user.getUsername()).isEmpty()) {
             //System.out.println(userService.findByUsername(user.getUsername()));
             userService.register(user);
             response.setStatus(HttpStatus.CREATED);
@@ -84,19 +85,29 @@ public class UserController implements Controller {
     }
 
     public Response getUserProfile(String username, Request request) {
-        Response response = new Response();
-        response.setStatus(HttpStatus.OK);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("grabbing of User Profile unhandled / not implemented");
-        return response;
+        Optional<Response> tokenInvalidResponse = sessionService.tokenInvalidResponse(username, request);
+        if(tokenInvalidResponse.isEmpty()) {
+            Response response = new Response();
+            response.setStatus(HttpStatus.OK);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody(userService.getJsonUserProfileAsString(userService.getUserByUsername(username).get()));
+            return response;
+        }
+        return tokenInvalidResponse.get();
     }
 
     public Response updateUserProfile(String username, Request request) {
-        Response response = new Response();
-        response.setStatus(HttpStatus.OK);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("update of User Profile unhandled / not implemented");
-        return response;
+        Optional<Response> tokenInvalidResponse = sessionService.tokenInvalidResponse(username, request);
+        if(tokenInvalidResponse.isEmpty()) {
+            userService.updateUserProfile(username, request.getBody());
+            Response response = new Response();
+            response.setStatus(HttpStatus.OK);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("User successfully updated");
+            //System.out.println("0: "+userService.getUserByUsername(username).get().getUsername()+ userService.getUserByUsername(username).get().getProfileName());
+            return response;
+        }
+        return tokenInvalidResponse.get();
     }
 
 

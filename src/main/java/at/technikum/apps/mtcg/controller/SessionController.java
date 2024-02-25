@@ -32,7 +32,7 @@ public class SessionController implements Controller{
             if (newToken.isPresent()) {
                 response.setStatus(HttpStatus.OK);
                 response.setContentType(HttpContentType.APPLICATION_JSON);
-                response.setBody(newToken.get());
+                response.setBody("\""+newToken.get()+"\"");
             }
             return response;
         }

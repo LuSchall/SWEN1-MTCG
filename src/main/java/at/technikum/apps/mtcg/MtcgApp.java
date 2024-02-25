@@ -29,6 +29,8 @@ public class MtcgApp implements ServerApplication {
                 return controller.handle(request);
             } catch (Exception e) {
 
+                e.printStackTrace();
+
                 Response response = new Response();
                 response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
                 response.setContentType(HttpContentType.TEXT_PLAIN);

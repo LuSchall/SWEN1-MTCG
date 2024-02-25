@@ -47,6 +47,7 @@ public class RequestHandler implements Runnable {
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
         String httpRequest = getHttpStringFromStream(in);
+        //System.out.println(httpRequest);
 
         Request request = HttpMapper.toRequestObject(httpRequest);
         //curl print formatting START

@@ -1,5 +1,7 @@
 package at.technikum.apps.mtcg.entity;
 
+import at.technikum.apps.mtcg.entityJson.UserProfileJson;
+
 public class User {
     private String username;
     private String password;
@@ -55,5 +57,13 @@ public class User {
 
     public String getImage() {
         return image;
+    }
+
+    public UserProfileJson getUserProfileJson() {
+        UserProfileJson profileJson = new UserProfileJson();
+        profileJson.setName(profileName);
+        profileJson.setBio(bio);
+        profileJson.setImage(image);
+        return profileJson;
     }
 }

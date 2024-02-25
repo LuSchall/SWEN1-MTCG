@@ -2,15 +2,10 @@ package at.technikum.apps.mtcg.repository;
 
 import at.technikum.apps.mtcg.entity.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import at.technikum.apps.mtcg.data.Database;
-import at.technikum.apps.mtcg.entity.User;
-import at.technikum.apps.task.entity.Task;
 
-import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +15,7 @@ public class DatabaseUserRepository implements UserRepository {
     private static final Database database = new Database();
     private static final String FIND_BY_USERNAME_SQL = "SELECT * FROM users WHERE Username = ?";
     private static final String SAVE_SQL = "INSERT INTO users(Username, Password) VALUES(?, ?)";
-
+    private static final String UPDATE_PROFILE_SQL = "UPDATE users SET ProfileName = ?, Bio = ?, Image = ? WHERE Username = ?";
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -47,13 +42,30 @@ public class DatabaseUserRepository implements UserRepository {
             return Optional.empty();
 
         } catch (SQLException e) {
-            return Optional.empty();
+            throw new RuntimeException(e);
         }
     }
+
     @Override
-    public boolean saveInDB(User user) { // returns true if successful and false if already in db
+    public void updateUserProfile(String username, String profileName, String bio, String image) {
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(UPDATE_PROFILE_SQL);
+        ) {
+            pstmt.setString(4, username);
+            pstmt.setString(2, profileName);
+            pstmt.setString(3, bio);
+            pstmt.setString(1, image);
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void saveInDB(User user) { // returns true if successful and false if already in db
         if (findByUsername(user.getUsername()).isPresent()) {
-            return false;
+            return;
         }
         try (
                 Connection con = database.getConnection();
@@ -62,9 +74,8 @@ public class DatabaseUserRepository implements UserRepository {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.execute();
-            return true;
         } catch (SQLException e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 }
