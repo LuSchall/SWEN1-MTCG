@@ -78,5 +78,6 @@ public class DatabaseUserRepository implements UserRepository {
             throw new RuntimeException(e);
         }
     }
+
 }
 

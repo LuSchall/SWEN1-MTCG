@@ -1,6 +1,6 @@
 package at.technikum.apps.mtcg.entityJson;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+//TODO DELETABLE/DELETE
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public class PackageJson {
     public List<CardJson> getCardsJson() {
         return cardsJson;
     }
-    public boolean setCardsJsonIsViablePackage(List<CardJson> cardsJson) {
+    public boolean setCardsJsonIfViable(List<CardJson> cardsJson) {
         for (int i = 0; i<5;   i++) {
             for (int j = 0; j<5; j++) {
                 if (cardsJson.get(i).getC_Id().equals(cardsJson.get(j).getC_Id())) return false;

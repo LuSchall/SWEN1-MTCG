@@ -7,6 +7,7 @@ import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
 
+import java.util.List;
 import java.util.Optional;
 
 public class CardController implements Controller {
@@ -28,17 +29,18 @@ public class CardController implements Controller {
     @Override
     public Response handle(Request request) throws Exception {
         Optional<Response> invalidTokenResponse = sessionService.tokenInvalidResponse(request);
-        Optional<String> optUsername = sessionService.getUserFromToken(request);
         if (invalidTokenResponse.isPresent()) return invalidTokenResponse.get();
-        if (optUsername.isEmpty()) return invalidTokenResponse.get(); //impossible i know but...
-        String username = optUsername.get();
-        cardService.getCardsOfUser(username);
-
-
         Response response = new Response();
-        response.setStatus(HttpStatus.OK);
+        String username = sessionService.getUserFromToken(request).get(); //token got cecked so get is OK...
+        if(cardService.userHasCards(username)) {
+            String body = cardService.getCardsOf(username);
+            response.setStatus(HttpStatus.OK);
+            response.setContentType(HttpContentType.APPLICATION_JSON);
+            response.setBody(body);
+        }
+        response.setStatus(HttpStatus.NO_CONTENT);
         response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("card controller unhandled");
+        response.setBody("The request was fine, but the user doesn't have any cards");
         return response;
     }
 

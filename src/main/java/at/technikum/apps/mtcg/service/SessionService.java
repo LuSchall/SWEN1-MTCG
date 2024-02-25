@@ -30,6 +30,8 @@ public class SessionService {
         }
         return Optional.empty();
     }
+
+    //todo: i think delete this one...
     private boolean isUserLoggedIn(String username) {
         if (tokens.get(username).isEmpty()) return false;
         return tokens.get(username).equals(generateBearerToken(username));
@@ -94,13 +96,19 @@ public class SessionService {
         }
         return Optional.of(response);
     }
-    public boolean isAdmin(Request request) {
+    public Optional<Response> invalidAdminSessionResponse(Request request) {
         //doublecheck - i know... but better save than sorry...
         Optional<Response> tokenInvalidResponse = tokenInvalidResponse(request);
         if (tokenInvalidResponse.isEmpty()) {
-            return isLoggedIn(request.getAuthorization().get()).get().getUsername().equals("admin"); //but intellij will never GET it xD xP
+            if (isLoggedIn(request.getAuthorization().get()).get().getUsername().equals("admin")) {//but intellij will never GET it xD xP
+                return Optional.empty();
+            } else  {
+                tokenInvalidResponse.get().setStatus(HttpStatus.FORBIDDEN);
+                tokenInvalidResponse.get().setContentType(HttpContentType.TEXT_PLAIN);
+                tokenInvalidResponse.get().setBody("Provided user is not \"admin\"");
+            }
         }
-        return false;
+        return tokenInvalidResponse;
     }
     public Optional<String> getUserFromToken(Request request) {
         //doublecheck - i know... but better save than sorry...

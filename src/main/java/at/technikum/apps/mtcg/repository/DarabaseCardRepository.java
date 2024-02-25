@@ -2,6 +2,7 @@ package at.technikum.apps.mtcg.repository;
 
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.data.Database;
+import at.technikum.apps.mtcg.entity.Package;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,11 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class DarabaseCardRepository implements CardRepository{
+public class DarabaseCardRepository implements CardRepository {
     private final Database database = new Database();
     private final String FIND_ALL_OF_USER_SQL = "SELECT * FROM cards WHERE Owner  = ?";
     private final String SAVE_CARD_SQL = "INSERT INTO cards(c_Id, Name, Damage, CardElement, CardType) VALUES(?, ?, ?, ?, ?)";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM cards WHERE c_Id = ?";
+
     @Override
     public Optional<Card> findById(String c_Id) {
         try (
@@ -33,7 +35,7 @@ public class DarabaseCardRepository implements CardRepository{
                         rs.getInt("Damage"),
                         rs.getString("Owner")
                 );
-                System.out.println(card.getOwner());
+                //System.out.println(card.getOwner());
                 return Optional.of(card);
             }
             return Optional.empty();
@@ -68,6 +70,7 @@ public class DarabaseCardRepository implements CardRepository{
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public boolean saveCard(Card card) {
         if (findById(card.getC_Id()).isPresent()) {
@@ -87,6 +90,14 @@ public class DarabaseCardRepository implements CardRepository{
             throw new RuntimeException(e);
         }
         return true;
+    }
+    @Override
+    public List<Card> getAllFromPackage(Package pack) {
+        List<Card> allFromPack = new ArrayList<>();
+        for (String cardId : pack.asListOfCardIds()) {
+            allFromPack.add(findById(cardId).get());
+        }
+        return allFromPack;
     }
 
 

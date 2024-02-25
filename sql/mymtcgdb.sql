@@ -6,7 +6,7 @@
 --### "default case-insensitive" but still...
 
 DROP TABLE users, cards, packages, decks, stats;
-DROP TYPE CardElement, CardType;
+--DROP TYPE CardElement, CardType;
 
 CREATE TABLE IF NOT EXISTS users (
     Username VARCHAR(255) PRIMARY KEY,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     Bio VARCHAR(255) DEFAULT NULL,
     Image VARCHAR(255) DEFAULT NULL
 );
-
+/*
 CREATE TYPE CardElement AS ENUM (
     'Normal',
     'Fire',
@@ -36,14 +36,14 @@ CREATE TYPE CardType AS ENUM (
     'Elve',     -- IF FIRE wins vs DRAGONS
     'Troll'
 );
-
+*/
 CREATE TABLE IF NOT EXISTS cards (
     c_Id VARCHAR(255) PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
     Damage INT NOT NULL,
     Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL,
-    CardElement CardElement DEFAULT NULL,
-    CardType CardType DEFAULT NULL
+    CardElement VARCHAR(255) DEFAULT NULL,
+    CardType VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS packages (

@@ -1,10 +1,7 @@
 package at.technikum.apps.mtcg;
 
 import at.technikum.apps.mtcg.controller.*;
-import at.technikum.apps.mtcg.repository.CardRepository;
-import at.technikum.apps.mtcg.repository.DarabaseCardRepository;
-import at.technikum.apps.mtcg.repository.DatabaseUserRepository;
-import at.technikum.apps.mtcg.repository.UserRepository;
+import at.technikum.apps.mtcg.repository.*;
 import at.technikum.apps.mtcg.service.CardService;
 import at.technikum.apps.mtcg.service.PackageService;
 import at.technikum.apps.mtcg.service.SessionService;
@@ -32,8 +29,8 @@ public class Injector {
         CardRepository cardRepository = new DarabaseCardRepository();
         CardService cardService = new CardService(cardRepository);
         controllerList.add(new CardController(cardService, sessionService));
-
-        PackageService packageService = new PackageService();
+        PackageRepository packageRepository = new DatabasePackageRepository();
+        PackageService packageService = new PackageService(packageRepository, cardService);
         controllerList.add(new PackageController(packageService, sessionService));
 
 

@@ -1,5 +1,7 @@
 package at.technikum.apps.mtcg.entity;
 
+import at.technikum.apps.mtcg.entityJson.CardJson;
+
 import java.util.Optional;
 
 public class Card {
@@ -10,6 +12,7 @@ public class Card {
     private int damage;
     private Optional<String> owner;
 
+    //todo delete constructor
     public Card(String c_Id, String name, int damage, String owner, CardElement cardElement, CardType cardType){
         this.c_Id = c_Id;
         this.name = name;
@@ -33,6 +36,14 @@ public class Card {
         this.owner = Optional.ofNullable(owner);
         this.cardType = CardType.getTypeFromName(name);
         this.cardElement = CardElement.getElementFromName(name);
+    }
+
+    public CardJson toCardJson() {
+        CardJson cardJ = new CardJson();
+        cardJ.setC_Id(this.c_Id);
+        cardJ.setName(this.name);
+        cardJ.setDamage(this.damage);
+        return cardJ;
     }
 
     public String getC_Id() {

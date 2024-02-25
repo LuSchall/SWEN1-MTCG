@@ -35,14 +35,14 @@ public class UserService {
     }
 
     public String getJsonUserProfileAsString(User user) {
-        String test;
+        String profile;
         //System.out.println("1  USERNAME: "+user.getUsername());
         UserProfileJson userProfile = user.getUserProfileJson();
         //System.out.println("2  PROFILE-JSON: "+userProfile.getName()+userProfile.getBio()+userProfile.getImage());
         try {
-            test = objectMapper.writeValueAsString(userProfile);
+            profile = objectMapper.writeValueAsString(userProfile);
             //System.out.println("3  PROFILE-STRING: "+test);
-            return test;
+            return profile;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
