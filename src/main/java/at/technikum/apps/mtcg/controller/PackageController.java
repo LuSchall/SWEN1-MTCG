@@ -33,12 +33,14 @@ public class PackageController implements Controller {
         boolean adminSession = sessionService.isAdmin(request);
         Response response = new Response();
         if (adminSession && request.getRoute().equals(packageRoute)) {
+            //todo continue
             response.setStatus(HttpStatus.OK);
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("package controller unhandled");
             return response;
         }
         if (request.getRoute().equals(transactionRoute)) {
+            //todo continue
             response.setStatus(HttpStatus.OK);
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("packageTransaction controller unhandled");

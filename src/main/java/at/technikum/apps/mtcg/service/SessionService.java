@@ -100,4 +100,12 @@ public class SessionService {
         }
         return false;
     }
+    public Optional<String> getUserFromToken(Request request) {
+        //doublecheck - i know... but better save than sorry...
+        Optional<Response> tokenInvalidResponse = tokenInvalidResponse(request);
+        if (tokenInvalidResponse.isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(isLoggedIn(request.getAuthorization().get()).get().getUsername()); //but intellij will never GET it xD xP
+    }
 }
