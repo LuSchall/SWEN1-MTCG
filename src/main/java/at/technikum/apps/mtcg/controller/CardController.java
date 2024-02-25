@@ -22,7 +22,7 @@ public class CardController implements Controller{
     }
 
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws Exception{
         //todo: continue here after session was implemented
         /*
         SessionService sessionService = new SessionService()

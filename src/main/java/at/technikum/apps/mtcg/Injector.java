@@ -31,8 +31,8 @@ public class Injector {
         //CardService cardService = new CardService();
         //controllerList.add(new CardController(cardService));
 
-        //PackageService packageService = new PackageService();
-        //controllerList.add(new PackageController(packageService));
+        PackageService packageService = new PackageService();
+        controllerList.add(new PackageController(packageService, sessionService));
 
 
 

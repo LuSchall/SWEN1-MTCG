@@ -72,4 +72,32 @@ public class SessionService {
         }
         return Optional.of(response);
     }
+    public Optional<Response> tokenInvalidResponse(Request request) {
+        Response response = new Response();
+        response.setStatus(HttpStatus.UNAUTHORIZED);
+        response.setContentType(HttpContentType.TEXT_PLAIN);
+        response.setBody("Access token is missing or invalid");
+        Optional<String> token = request.getAuthorization();
+        if (token.isEmpty()) return Optional.of(response);
+        Optional<User> user = isLoggedIn(token.get());
+        if (user.isEmpty()) {
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setContentType(HttpContentType.TEXT_PLAIN);
+            response.setBody("User not found");
+            return Optional.of(response);
+        }
+        if (getUserOfToken(token.get()).isEmpty()) return Optional.of(response);
+        if (user.get().getUsername().equals(getUserOfToken(token.get()).get().getUsername())) {
+            return Optional.empty();
+        }
+        return Optional.of(response);
+    }
+    public boolean isAdmin(Request request) {
+        //doublecheck - i know... but better save than sorry...
+        Optional<Response> tokenInvalidResponse = tokenInvalidResponse(request);
+        if (tokenInvalidResponse.isEmpty()) {
+            return isLoggedIn(request.getAuthorization().get()).get().getUsername().equals("admin"); //but intellij will never GET it xD xP
+        }
+        return false;
+    }
 }

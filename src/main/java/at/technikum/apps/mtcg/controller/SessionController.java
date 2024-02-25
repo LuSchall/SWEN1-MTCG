@@ -21,7 +21,7 @@ public class SessionController implements Controller{
     }
 
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws Exception{
         Response response = new Response();
         response.setStatus(HttpStatus.UNAUTHORIZED);
         response.setContentType(HttpContentType.TEXT_PLAIN);

@@ -26,7 +26,7 @@ public class UserController implements Controller {
     }
 
     @Override
-    public Response handle(Request request) {
+    public Response handle(Request request) throws Exception{
         if (request.getRoute().equals(userRoute)) {
             switch (request.getMethod()) {
                 case "POST": return register(request);
@@ -47,7 +47,7 @@ public class UserController implements Controller {
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("User not found.");
         }
-        //TODO: check access TOKEN
+        //check access TOKEN here if I have time
         switch (request.getMethod()) {
             case "GET": return getUserProfile(username, request); // only NAME BIO AND IMAGE
             case "PUT": return updateUserProfile(username, request); // only NAME BIO AND IMAGE
