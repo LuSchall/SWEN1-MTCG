@@ -65,6 +65,8 @@ public class RequestHandler implements Runnable {
         //i++; System.out.println(i + ")\n" + httpRequest + "\n------------------------------------------------------");
 
         Response response = app.handle(request);
+        if (200 != response.getStatusCode()) response.setStatusMessage(response.getBody());
+
 
         out = new PrintWriter(client.getOutputStream(), true);
         out.write(HttpMapper.toResponseString(response));

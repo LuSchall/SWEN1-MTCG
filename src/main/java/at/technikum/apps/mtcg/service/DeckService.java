@@ -83,4 +83,17 @@ public class DeckService {
         }
         return cardService.convertListToJsonString(deckCards);
     }
+
+    public String getDeckString(String username) {
+        List<String>deckCardIds = deckRepository.getDeck(username).get().asListOfCardIds();
+        List<Card> deckCards = new ArrayList<>();
+        String deckString = username + ":\n";
+        Card card;
+        int i = 1;
+        for (String cardId: deckCardIds             ) {
+            card = cardService.findById(cardId).get();
+            deckString = deckString +"Card" +i++ +": " + card.getName() +" with " + card.getDamage()+ " Damage.\n";
+        }
+        return deckString;
+    }
 }

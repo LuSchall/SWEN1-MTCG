@@ -25,27 +25,33 @@ public class DeckController implements Controller{
 
     @Override
     public boolean supports(String route) {
-        return route.equals(deckRoute);
+        return route.startsWith(deckRoute);
     }
 
     @Override
     public Response handle(Request request) throws Exception {
-        //check access
         Optional<Response> tokenInvalidResponse = sessionService.tokenInvalidResponse(request);
         if (tokenInvalidResponse.isPresent()) return tokenInvalidResponse.get();
         String username = sessionService.getUserFromToken(request).get();
         Response response = new Response();
         if (request.getMethod().equals("GET")) {
-            if (!deckService.userHasDeck(username)) {
+            //System.out.println(deckService.userHasDeck(username) +" "+ username);
+            //System.out.println(deckService.getDeckString(username));
+            if (!(deckService.userHasDeck(username))) {
                 response.setStatus(HttpStatus.NO_CONTENT);
                 response.setContentType(HttpContentType.TEXT_PLAIN);
                 response.setBody("The request was fine, but the deck doesn't have any cards");
                 return response;
             }
-            String deckJsonString = deckService.getDeckJsonString(username);
+            if (request.getRoute().endsWith("?format=plain")) {
+                response.setStatus(HttpStatus.OK);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody(deckService.getDeckString(username));
+                return response;
+            }
             response.setStatus(HttpStatus.OK);
             response.setContentType(HttpContentType.APPLICATION_JSON);
-            response.setBody(deckJsonString);
+            response.setBody(deckService.getDeckJsonString(username));
             return response;
             //todo show users deck
         } else if (request.getMethod().equals("PUT")) {
