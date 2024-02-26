@@ -53,7 +53,6 @@ public class DeckController implements Controller{
             response.setContentType(HttpContentType.APPLICATION_JSON);
             response.setBody(deckService.getDeckJsonString(username));
             return response;
-            //todo show users deck
         } else if (request.getMethod().equals("PUT")) {
             if (!deckService.deckHasRightAmount(request.getBody())){
                 response.setStatus(HttpStatus.BAD_REQUEST);

@@ -5,7 +5,7 @@
 
 --### "default case-insensitive" but still...
 
-DROP TABLE users, cards, packages, decks;
+DROP TABLE users, cards, packages, decks, tradingdeals;
 --DROP stats
 --DROP TYPE CardElement, CardType;
 
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS cards (
     Damage INT NOT NULL,
     Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL,
     CardElement VARCHAR(255) DEFAULT NULL,
-    CardType VARCHAR(255) DEFAULT NULL
+    CardType VARCHAR(255) DEFAULT NULL,
+    MonsterDescription VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS packages (
@@ -66,6 +67,12 @@ CREATE TABLE IF NOT EXISTS decks (
     d_cardId4 VARCHAR(255) references cards(c_Id)
 );
 
+CREATE TABLE IF NOT EXISTS tradingdeals (
+    TradeID varchar(255) PRIMARY KEY,
+    CardToTrade VARCHAR(255) REFERENCES cards(c_Id),
+    Type VARCHAR(255),
+    MinDamage VARCHAR(255)
+);
 -- ### GAME related
 -- stats(from user(name, elo), wins, losses);
 /*
