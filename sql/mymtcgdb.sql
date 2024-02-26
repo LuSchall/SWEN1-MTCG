@@ -70,8 +70,8 @@ CREATE TABLE IF NOT EXISTS decks (
 CREATE TABLE IF NOT EXISTS tradingdeals (
     TradeID varchar(255) PRIMARY KEY,
     CardToTrade VARCHAR(255) REFERENCES cards(c_Id),
-    Type VARCHAR(255),
-    MinDamage VARCHAR(255)
+    RequestedType VARCHAR(255),
+    RequestedMinDamage VARCHAR(255)
 );
 -- ### GAME related
 -- stats(from user(name, elo), wins, losses);

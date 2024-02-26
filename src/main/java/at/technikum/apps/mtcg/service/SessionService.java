@@ -42,11 +42,11 @@ public class SessionService {
         return getUserOfToken(authorization);
     }
 
-    private Optional<String> generateBearerToken(String username) {
+    Optional<String> generateBearerToken(String username) {
         return Optional.of(username + "-mtcgToken");
     }
 
-    private Optional<User> getUserOfToken(String token){
+    public Optional<User> getUserOfToken(String token){
         //MAGIC
         int length = token.length();
         token = token.substring(7, length - 10);

@@ -4,13 +4,11 @@ import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.entityJson.UserJson;
 import at.technikum.apps.mtcg.service.SessionService;
 import at.technikum.apps.mtcg.service.UserService;
-import at.technikum.server.http.HttpContentType;
-import at.technikum.server.http.HttpMethod;
-import at.technikum.server.http.HttpStatus;
-import at.technikum.server.http.Request;
+import at.technikum.server.http.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -18,8 +16,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserControllerTest {
-    private UserService userService;
-    private SessionService sessionService;
+
+    private  UserService userService;
+    private  SessionService sessionService;
     private  UserController controller;
 
 
@@ -42,6 +41,38 @@ class UserControllerTest {
         assertTrue(controller.supports("/users/123"));
 
         assertFalse(controller.supports("/users123"));
+    }
+
+    @Test
+    public void testRegisterFirstTime() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users");
+        request.setMethod(HttpMethod.POST);
+        request.setBody("*");
+
+        final var userJson = new UserJson();
+        userJson.setUsername("myUsername");
+        userJson.setPassword("myPassword");
+
+        Mockito.when(userService.getUserJsonFromBody("*")).thenReturn(userJson);
+        Mockito.when(userService.getUserByUsername("myUsername")).thenReturn(Optional.empty());
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        Mockito.verify(userService).getUserJsonFromBody(Mockito.eq("*"));
+        Mockito.verify(userService).getUserByUsername(Mockito.eq("myUsername"));
+
+        final var userArgCaptor =  ArgumentCaptor.forClass(User.class);
+        Mockito.verify(userService).register(userArgCaptor.capture());
+        assertEquals("myUsername", userArgCaptor.getValue().getUsername());
+        assertEquals("myPassword", userArgCaptor.getValue().getPassword());
+
+        assertEquals(HttpStatus.CREATED.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
+        assertEquals("User successfully created", response.getBody());
     }
 
     @Test
@@ -124,11 +155,116 @@ class UserControllerTest {
         assertEquals("User not found.", response.getBody());
     }
 
+    @Test
+    public void testInvalidUserMethod() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/abc");
+        request.setMethod(HttpMethod.DELETE);
 
+        Mockito.when(userService.getUserByUsername("abc")).thenReturn(Optional.of(new User("1", "2")));
 
+        // Act
+        final var response = controller.handle(request);
 
+        // Assert
+        Mockito.verify(sessionService).tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request));
+        Mockito.verify(userService).getUserByUsername("abc");
 
+        assertEquals(HttpStatus.BAD_REQUEST.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
+        assertEquals("Bad Request", response.getBody());
+    }
 
+    @Test
+    public void testGetUserUnauthorized() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/abc");
+        request.setMethod(HttpMethod.GET);
 
+        Response unauthorizedResponse = new Response();
 
+        User savedUser = new User("1", "2");
+        Mockito.when(sessionService.tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request))).thenReturn(Optional.of(unauthorizedResponse));
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        Mockito.verify(sessionService).tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request));
+
+        assertSame(unauthorizedResponse, response);
+    }
+
+    @Test
+    public void testGetUser() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/abc");
+        request.setMethod(HttpMethod.GET);
+
+        User savedUser = new User("1", "2");
+        Mockito.when(userService.getUserByUsername("abc")).thenReturn(Optional.of(savedUser));
+        Mockito.when(sessionService.tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request))).thenReturn(Optional.empty());
+        Mockito.when(userService.getJsonUserProfileAsString(Mockito.same(savedUser))).thenReturn("jsonForUser");
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        Mockito.verify(userService).getUserByUsername("abc");
+        Mockito.verify(sessionService).tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request));
+        Mockito.verify(userService).getJsonUserProfileAsString(Mockito.same(savedUser));
+
+        assertEquals(HttpStatus.OK.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.APPLICATION_JSON.getMimeType(), response.getContentType());
+        assertEquals("jsonForUser", response.getBody());
+    }
+
+    @Test
+    public void testUpdateUserUnauthorized() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/abc");
+        request.setMethod(HttpMethod.PUT);
+
+        Response unauthorizedResponse = new Response();
+
+        User savedUser = new User("1", "2");
+        Mockito.when(sessionService.tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request))).thenReturn(Optional.of(unauthorizedResponse));
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        Mockito.verify(sessionService).tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request));
+
+        assertSame(unauthorizedResponse, response);
+    }
+
+    @Test
+    public void testUpdateUser() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/abc");
+        request.setMethod(HttpMethod.PUT);
+        request.setBody("UpdateJson");
+
+        User savedUser = new User("1", "2");
+        Mockito.when(sessionService.tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request))).thenReturn(Optional.empty());
+        Mockito.when(userService.getUserByUsername("abc")).thenReturn(Optional.of(savedUser));
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        Mockito.verify(sessionService).tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request));
+        Mockito.verify(userService).getUserByUsername("abc");
+        Mockito.verify(userService).updateUserProfile("abc", "UpdateJson");
+
+        assertEquals(HttpStatus.OK.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
+        assertEquals("User successfully updated", response.getBody());
+    }
 }

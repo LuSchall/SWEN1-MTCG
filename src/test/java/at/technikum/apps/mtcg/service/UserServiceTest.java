@@ -3,10 +3,13 @@ package at.technikum.apps.mtcg.service;
 import at.technikum.apps.mtcg.entity.User;
 import at.technikum.apps.mtcg.entityJson.UserJson;
 import at.technikum.apps.mtcg.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -14,32 +17,35 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
+
+    private ObjectMapper objectMapper;
     private UserRepository userRepository;
-    private UserService userService;
+    private UserService service;
+
     @BeforeEach
-    public void init() {
-        ObjectMapper objectMapper = new ObjectMapper();
+    public void setUp() {
+        objectMapper = Mockito.mock(ObjectMapper.class);
         userRepository = Mockito.mock(UserRepository.class);
-        userService = new UserService(userRepository);
+        service = new UserService(userRepository);
     }
+
     @AfterEach
-    public void verifyMock() {
-        Mockito.verifyNoMoreInteractions(userRepository);
+    public void tearDown() {
+        Mockito.verifyNoMoreInteractions(objectMapper, userRepository);
     }
 
     @Test
-    void getUserJsonFromBody() {
-        userService = new UserService(userRepository);
-
-        String body = "{\"Username\":\"MyUsername\",\"Password\":\"MySecret\"}";
+    void testRegister() {
+        // Arrange
+        User user = new User("username", "password");
 
         // Act
-        UserJson result = userService.getUserJsonFromBody(body);
+        service.register(user);
 
         // Assertion
-        assertEquals("MyUsername", result.getUsername());
-        assertEquals("MySecret", result.getPassword());
+        Mockito.verify(userRepository).saveInDB(Mockito.same(user));
     }
+
     @Test
     void testGetUserByUsername() {
         // Arrange
@@ -49,11 +55,26 @@ class UserServiceTest {
         Mockito.when(userRepository.findByUsername(username)).thenReturn(answer);
 
         // Act
-        Optional<User> result = userService.getUserByUsername(username);
+        Optional<User> result = service.getUserByUsername(username);
 
         // Assertion
         Mockito.verify(userRepository).findByUsername(username);
 
         assertSame(answer, result);
+    }
+    @Test
+    void testGetUserJsonFromBodyWithRealObjectMapper() throws JsonProcessingException {
+        // Arrange
+        ObjectMapper realObjectMapper = new ObjectMapper();
+        service = new UserService(userRepository);
+
+        String body = "{\"Username\":\"MyUsername\",\"Password\":\"MySecret\"}";
+
+        // Act
+        UserJson result = service.getUserJsonFromBody(body);
+
+        // Assertion
+        assertEquals("MyUsername", result.getUsername());
+        assertEquals("MySecret", result.getPassword());
     }
 }
