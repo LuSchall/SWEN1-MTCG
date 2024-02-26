@@ -26,14 +26,14 @@ public class DatabaseTradingRepository implements TradingRepository {
                 ResultSet rs = pstmt.executeQuery();
         ) {
             Deal deal;
-            if (rs.next()) {
+            while (rs.next()) {
                 deal = new Deal(
                         rs.getString("TradeID"),
                         rs.getString("CardToTrade"),
                         rs.getString("Type"),
                         rs.getInt("MinDamage")
                 );
-                return allDeals;
+                allDeals.add(deal);
             }
             return allDeals;
         } catch (SQLException e) {

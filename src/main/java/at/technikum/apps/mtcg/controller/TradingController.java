@@ -63,7 +63,8 @@ public class TradingController implements Controller {
                     throw new RuntimeException(e);
                 }
                 Deal deal = dealJson.toDeal();
-                System.out.println(deal.getTradeID());
+                //System.out.println(deal.getTradeID());
+                //System.out.println(tradingService.dealExists(deal.getTradeID()));
                 if (tradingService.dealExists(deal.getTradeID())) {
                     response.setStatus(HttpStatus.CONFLICT);
                     response.setContentType(HttpContentType.TEXT_PLAIN);
@@ -85,9 +86,6 @@ public class TradingController implements Controller {
             }
             return response;
         }
-        response.setStatus(HttpStatus.OK);
-        response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("what up?");
         if (request.getRoute().startsWith(tradeRoute+"/")){
             if (request.getMethod().equals("DELETE")) {
                 //deletes an existing trading deal
@@ -98,7 +96,6 @@ public class TradingController implements Controller {
                 //check if card is owned by the one selling AND if requirements are met AND card is not in deck
                 //deal id not found
             }
-            return response;
         }
         response.setStatus(HttpStatus.NOT_FOUND);
         response.setContentType(HttpContentType.TEXT_PLAIN);

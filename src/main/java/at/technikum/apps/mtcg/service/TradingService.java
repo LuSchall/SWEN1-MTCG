@@ -44,6 +44,7 @@ public class TradingService {
 
     public boolean dealExists(String dealId) {
         List<Deal> deals = tradingRepository.getAvailableDeals();
+
         if (deals.isEmpty()) return false;
         for (Deal deal : deals) {
             if(deal.getTradeID().equals(dealId)) return true;
