@@ -21,7 +21,7 @@ public class ScoreboardController implements Controller{
 
     @Override
     public boolean supports(String route) {
-        return route.equals(scoreboardRoute);
+        return route.equals(scoreboardRoute) || route.equals(scoreboardRoute+"/");
     }
 
     @Override

@@ -29,5 +29,14 @@ class ScoreboardControllerTest {
 
     @Test
     void supports() {
+        assertTrue(controller.supports("/scoreboard"));
+        assertTrue(controller.supports("/scoreboard/"));
+
+
+        assertFalse(controller.supports("/scoreboard/123"));
+        assertFalse(controller.supports("/scoreboard//"));
+        assertFalse(controller.supports("/scoreboard123"));
+        assertFalse(controller.supports("scoreboard"));
+
     }
 }

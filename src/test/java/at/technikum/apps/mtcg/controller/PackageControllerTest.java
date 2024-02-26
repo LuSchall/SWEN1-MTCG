@@ -29,5 +29,15 @@ class PackageControllerTest {
     }
     @Test
     void supports() {
+        assertTrue(controller.supports("/packages"));
+        assertTrue(controller.supports("/transactions/packages"));
+
+
+        assertFalse(controller.supports("/packages/123"));
+        assertFalse(controller.supports("/transactions"));
+        assertFalse(controller.supports("/packages123"));
+        assertFalse(controller.supports("packages"));
+
+
     }
 }

@@ -29,5 +29,11 @@ class TradingControllerTest {
     }
     @Test
     void supports() {
+        assertTrue(controller.supports("/tradings"));
+        assertTrue(controller.supports("/tradings/123"));
+
+        assertFalse(controller.supports("/tradings123"));
+        assertFalse(controller.supports("tradings"));
+        assertFalse(controller.supports("123/tradings"));
     }
 }

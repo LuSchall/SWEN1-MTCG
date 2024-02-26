@@ -10,24 +10,26 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SessionControllerTest {
-
-    private UserService userService;
     private SessionService sessionService;
-    private  UserController controller;
+    private  SessionController controller;
 
 
     @BeforeEach
     public void setUp() {
-        userService = Mockito.mock(UserService.class);
         sessionService = Mockito.mock(SessionService.class);
-        controller = new UserController(userService, sessionService);
+        controller = new SessionController(sessionService);
     }
 
     @AfterEach
     public void tearDown() {
-        Mockito.verifyNoMoreInteractions(userService, sessionService);
+        Mockito.verifyNoMoreInteractions(sessionService);
     }
     @Test
     void supports() {
+        assertTrue(controller.supports("/sessions"));
+
+        assertFalse(controller.supports("/sessions123"));
+        assertFalse(controller.supports("/sessions/123"));
+        assertFalse(controller.supports("sessions"));
     }
 }

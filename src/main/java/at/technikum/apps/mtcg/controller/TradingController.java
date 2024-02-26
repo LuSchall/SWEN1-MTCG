@@ -23,7 +23,7 @@ public class TradingController implements Controller {
 
     @Override
     public boolean supports(String route) {
-        return route.startsWith(tradeRoute);
+        return route.equals(tradeRoute) || route.startsWith(tradeRoute + "/");
     }
 
     @Override

@@ -29,5 +29,9 @@ class StatControllerTest {
 
     @Test
     void supports() {
+        assertTrue(controller.supports("/stats"));
+
+        assertFalse(controller.supports("/stats/123"));
+        assertFalse(controller.supports("/stats123"));
     }
 }
