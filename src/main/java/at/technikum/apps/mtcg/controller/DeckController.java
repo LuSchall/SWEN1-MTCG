@@ -25,7 +25,7 @@ public class DeckController implements Controller{
 
     @Override
     public boolean supports(String route) {
-        return route.equals(deckRoute) || route.startsWith(deckRoute +"/");
+        return route.equals(deckRoute) || route.startsWith(deckRoute +"/") || route.startsWith(deckRoute+"?");
     }
 
     @Override
