@@ -32,7 +32,7 @@ public class CardService {
         return convertListToJsonString(getAllCardsOfUser(username));
     }
 
-    private List<Card> getAllCardsOfUser(String username) {
+    public List<Card> getAllCardsOfUser(String username) {
         return cardRepository.findAllOfUser(username);
     }
 
@@ -62,6 +62,5 @@ public class CardService {
         }
         return cardsAsJsonString;
     }
-
 }
 

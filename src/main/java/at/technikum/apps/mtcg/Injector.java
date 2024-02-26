@@ -41,7 +41,7 @@ public class Injector {
         controllerList.add(new DeckController(deckService, sessionService));
         //trade
         TradingRepository tradingRepository = new DatabaseTradingRepository();
-        TradingService tradingService = new TradingService(tradingRepository, cardService);
+        TradingService tradingService = new TradingService(tradingRepository, cardService, deckService);
         controllerList.add(new TradingController(tradingService,sessionService));
 
 

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface TradingRepository {
     List<Deal> getAvailableDeals();
+
+    void saveDeal(Deal deal);
 }

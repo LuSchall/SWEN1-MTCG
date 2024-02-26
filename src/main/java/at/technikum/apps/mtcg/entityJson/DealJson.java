@@ -1,5 +1,6 @@
 package at.technikum.apps.mtcg.entityJson;
 
+import at.technikum.apps.mtcg.entity.Deal;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DealJson {
@@ -42,5 +43,9 @@ public class DealJson {
 
     public void setMinimumDamage(int minimumDamage) {
         this.minimumDamage = minimumDamage;
+    }
+
+    public Deal toDeal() {
+        return new Deal(this.tradeID, this.cardID, this.type, this.minimumDamage);
     }
 }

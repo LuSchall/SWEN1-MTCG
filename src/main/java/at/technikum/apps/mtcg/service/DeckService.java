@@ -96,4 +96,7 @@ public class DeckService {
         }
         return deckString;
     }
+    public Optional<Deck> getDeckFromUser(String username) {
+        return deckRepository.getDeck(username);
+    }
 }

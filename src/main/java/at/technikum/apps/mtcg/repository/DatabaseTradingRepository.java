@@ -15,7 +15,7 @@ import java.util.Optional;
 public class DatabaseTradingRepository implements TradingRepository {
     private final Database database = new Database();
     private static final String GET_ALL_DEALS_SQL = "SELECT * FROM tradingdeals";
-
+    private final String SAVE_DEAL_SQL = "INSERT INTO tradingdeals(TradeID, CardToTrade, Type, MinDamage) VALUES(?, ?, ?, ?)";
 
     @Override
     public List<Deal> getAvailableDeals() {
@@ -36,6 +36,22 @@ public class DatabaseTradingRepository implements TradingRepository {
                 return allDeals;
             }
             return allDeals;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void saveDeal(Deal deal) {
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(SAVE_DEAL_SQL)
+        ) {
+            pstmt.setString(1, deal.getTradeID());
+            pstmt.setString(2, deal.getCardToTrade());
+            pstmt.setString(3, deal.getType());
+            pstmt.setInt(4, deal.getMinDamage());
+            pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

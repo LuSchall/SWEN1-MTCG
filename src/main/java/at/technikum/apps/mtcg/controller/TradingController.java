@@ -1,5 +1,7 @@
 package at.technikum.apps.mtcg.controller;
 
+import at.technikum.apps.mtcg.entity.Deal;
+import at.technikum.apps.mtcg.entityJson.DealJson;
 import at.technikum.apps.mtcg.service.CardService;
 import at.technikum.apps.mtcg.service.SessionService;
 import at.technikum.apps.mtcg.service.TradingService;
@@ -7,10 +9,15 @@ import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
 import at.technikum.server.http.Request;
 import at.technikum.server.http.Response;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 public class TradingController implements Controller {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final SessionService sessionService;
     private final TradingService tradingService;
     private static final String tradeRoute = "/tradings";
@@ -49,12 +56,38 @@ public class TradingController implements Controller {
                 return response;
             }
             if (request.getMethod().equals("POST")) {
-                //creates new trading deal
-                //check card: IF IN DECK and IF card OWNED BY USER
-                //check IF DEAL_ID EXISTS
+                DealJson dealJson;
+                try {
+                    dealJson = objectMapper.readValue(request.getBody(), DealJson.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                Deal deal = dealJson.toDeal();
+                System.out.println(deal.getTradeID());
+                if (tradingService.dealExists(deal.getTradeID())) {
+                    response.setStatus(HttpStatus.CONFLICT);
+                    response.setContentType(HttpContentType.TEXT_PLAIN);
+                    response.setBody("A deal with this deal ID already exists");
+                    return response;
+                }
+                if (!tradingService.isOwnedByUser(username,deal.getCardToTrade())
+                        && tradingService.isInDeck(username, deal.getCardToTrade())) {
+                    response.setStatus(HttpStatus.FORBIDDEN);
+                    response.setContentType(HttpContentType.TEXT_PLAIN);
+                    response.setBody("The deal contains a card that is not owned by the user or locked in the deck");
+                    return response;
+                }
+                tradingService.pushApprovedDeal(deal);
+                response.setStatus(HttpStatus.CREATED);
+                response.setContentType(HttpContentType.TEXT_PLAIN);
+                response.setBody("Trading deal successfully created");
+                return response;
             }
             return response;
         }
+        response.setStatus(HttpStatus.OK);
+        response.setContentType(HttpContentType.TEXT_PLAIN);
+        response.setBody("what up?");
         if (request.getRoute().startsWith(tradeRoute+"/")){
             if (request.getMethod().equals("DELETE")) {
                 //deletes an existing trading deal
