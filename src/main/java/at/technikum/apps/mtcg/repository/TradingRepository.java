@@ -9,4 +9,8 @@ public interface TradingRepository {
     List<Deal> getAvailableDeals();
 
     void saveDeal(Deal deal);
+
+    Optional<Deal> getDealByID(String dealId);
+
+    void deleteDeal(String tradeId);
 }

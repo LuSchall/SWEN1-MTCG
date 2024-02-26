@@ -87,10 +87,16 @@ public class TradingController implements Controller {
             return response;
         }
         if (request.getRoute().startsWith(tradeRoute+"/")){
+            String[] routeParts = request.getRoute().split("/");
+            String tradeId = routeParts[2];
             if (request.getMethod().equals("DELETE")) {
-                //deletes an existing trading deal
-                //check if deal is owned by user
-                //check if deal found
+                if (!tradingService.cardOfTradeIsOwnedByUser(username, tradeId)) {
+                    response.setStatus(HttpStatus.CREATED);
+                    response.setContentType(HttpContentType.TEXT_PLAIN);
+                    response.setBody("The deal contains a card that is not owned by the user or locked in the deck");
+                    return response;
+                }
+                tradingService.deleteApprovedDeal(tradeId);
             }
             if (request.getMethod().equals("POST")) {
                 //check if card is owned by the one selling AND if requirements are met AND card is not in deck

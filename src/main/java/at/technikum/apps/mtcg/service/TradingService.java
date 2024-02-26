@@ -69,4 +69,13 @@ public class TradingService {
     public void pushApprovedDeal(Deal deal) {
         tradingRepository.saveDeal(deal);
     }
+
+    public boolean cardOfTradeIsOwnedByUser(String username, String tradeId) {
+        Optional<Deal> deal = tradingRepository.getDealByID(tradeId);
+        return deal.isEmpty() ? false : isOwnedByUser(username, deal.get().getCardToTrade());
+    }
+
+    public void deleteApprovedDeal(String tradeId) {
+        tradingRepository.deleteDeal(tradeId);
+    }
 }
