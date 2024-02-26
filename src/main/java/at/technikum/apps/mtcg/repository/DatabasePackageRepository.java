@@ -24,38 +24,35 @@ public class DatabasePackageRepository implements PackageRepository {
 
     @Override
     public void savePackage(List<Card> cards) {
-        boolean nothingWentWrong = true;
         for (Card card : cards) {
-            if (cardRepository.findById(card.getC_Id()).isPresent()) nothingWentWrong = false;
+            cardRepository.saveCard(card);
         }
-        if (nothingWentWrong) {
-            for (Card card : cards) {
-                if (!cardRepository.saveCard(card)) nothingWentWrong = false;
-            }
-            try (
-                    Connection con = database.getConnection();
-                    PreparedStatement pstmt = con.prepareStatement(SAVE_PACKAGE_SQL)
-            ) {
-                pstmt.setString(1, cards.get(0).getC_Id());
-                pstmt.setString(2, cards.get(1).getC_Id());
-                pstmt.setString(3, cards.get(2).getC_Id());
-                pstmt.setString(4, cards.get(3).getC_Id());
-                pstmt.setString(5, cards.get(4).getC_Id());
-                pstmt.execute();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        try (
+                Connection con = database.getConnection();
+                PreparedStatement pstmt = con.prepareStatement(SAVE_PACKAGE_SQL)
+        ) {
+            pstmt.setString(1, cards.get(0).getC_Id());
+            pstmt.setString(2, cards.get(1).getC_Id());
+            pstmt.setString(3, cards.get(2).getC_Id());
+            pstmt.setString(4, cards.get(3).getC_Id());
+            pstmt.setString(5, cards.get(4).getC_Id());
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
     @Override
     public boolean hasSufficientCoins(String username) {
-        return getCoins(username)>= 5;
+        return getCoins(username) >= 5;
     }
+
     @Override
     public boolean packageIsAvailable() {
         Optional<Package> cardPackage = getPackage();
         return cardPackage.isPresent();
     }
+
     @Override
     public Package sellPackageTo(String username) {
         Package cardPackage = getPackage().get();
@@ -67,7 +64,7 @@ public class DatabasePackageRepository implements PackageRepository {
 
     private void deleteCoins(String username) {
         int coins = getCoins(username);
-        coins = coins -5;
+        coins = coins - 5;
         try (
                 Connection con = database.getConnection();
                 PreparedStatement pstmt = con.prepareStatement(UPDATE_COINS_SQL);
@@ -79,6 +76,7 @@ public class DatabasePackageRepository implements PackageRepository {
             throw new RuntimeException(e);
         }
     }
+
     private int getCoins(String username) {
         int coins = 0;
         try (

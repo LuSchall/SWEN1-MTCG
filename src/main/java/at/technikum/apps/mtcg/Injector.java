@@ -31,7 +31,9 @@ public class Injector {
         controllerList.add(new PackageController(packageService, sessionService));
         controllerList.add(new StatController(userService, sessionService));
         controllerList.add(new ScoreboardController(userService,sessionService));
-
+        DeckRepository deckRepository = new DatabaseDeckRepository();
+        DeckService deckService = new DeckService(cardService, deckRepository);
+        controllerList.add(new DeckController(deckService, sessionService));
 
 
 

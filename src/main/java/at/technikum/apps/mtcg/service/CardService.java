@@ -4,7 +4,9 @@ import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.Package;
 import at.technikum.apps.mtcg.entityJson.CardJson;
 import at.technikum.apps.mtcg.repository.CardRepository;
+import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
@@ -59,5 +61,6 @@ public class CardService {
         }
         return cardsAsJsonString;
     }
+
 }
 
