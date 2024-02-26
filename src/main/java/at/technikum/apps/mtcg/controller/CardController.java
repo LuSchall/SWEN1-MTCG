@@ -23,7 +23,7 @@ public class CardController implements Controller {
 
     @Override
     public boolean supports(String route) {
-        return route.equals(cardRoute);
+        return route.equals(cardRoute) || route.equals(cardRoute+"/");
     }
 
     @Override
