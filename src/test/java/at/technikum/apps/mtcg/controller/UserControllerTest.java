@@ -36,6 +36,15 @@ class UserControllerTest {
     }
 
     @Test
+    public void testSupportsRoute() {
+        assertTrue(controller.supports("/users"));
+        assertTrue(controller.supports("/users/"));
+        assertTrue(controller.supports("/users/123"));
+
+        assertFalse(controller.supports("/users123"));
+    }
+
+    @Test
     public void testRegisterConflict() throws Exception {
         // Arrange
         final var request = new Request();
@@ -114,7 +123,11 @@ class UserControllerTest {
         assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
         assertEquals("User not found.", response.getBody());
     }
-    
+
+
+
+
+
 
 
 

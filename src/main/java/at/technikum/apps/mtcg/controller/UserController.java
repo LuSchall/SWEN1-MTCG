@@ -22,7 +22,7 @@ public class UserController implements Controller {
     }
     @Override
     public boolean supports(String route) {
-        return route.startsWith(userRoute);
+        return route.equals(userRoute) || route.startsWith(userRoute + "/");
     }
 
     @Override
