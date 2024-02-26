@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS cards (
     Owner VARCHAR(255)  REFERENCES users(Username) DEFAULT NULL,
     CardElement VARCHAR(255) DEFAULT NULL,
     CardType VARCHAR(255) DEFAULT NULL,
-    MonsterDescription VARCHAR(255) DEFAULT NULL
+    Description VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS packages (
@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS decks (
 
 CREATE TABLE IF NOT EXISTS tradingdeals (
     TradeID varchar(255) PRIMARY KEY,
-    CardToTrade VARCHAR(255) REFERENCES cards(c_Id),
-    RequestedType VARCHAR(255),
-    RequestedMinDamage VARCHAR(255)
+    CardToTrade VARCHAR(255) REFERENCES cards(c_Id) NOT NULL,
+    Type VARCHAR(255) NOT NULL,
+    MinDamage INT NOT NULL
 );
 -- ### GAME related
 -- stats(from user(name, elo), wins, losses);

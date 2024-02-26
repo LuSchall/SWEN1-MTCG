@@ -3,6 +3,7 @@ package at.technikum.apps.mtcg.service;
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.Package;
 import at.technikum.apps.mtcg.entityJson.CardJson;
+import at.technikum.apps.mtcg.entityJson.outCardJson;
 import at.technikum.apps.mtcg.repository.PackageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -55,9 +56,9 @@ public class PackageService {
     private String packageCardsAsJson(Package pack) {
         String cardsAsJsonString;
         List<Card> cardsAsList = cardService.getCardsFromPackage(pack);
-        List<CardJson> cardJsonsList = new ArrayList<>();
+        List<outCardJson> cardJsonsList = new ArrayList<>();
         for (Card card : cardsAsList) {
-            cardJsonsList.add(card.toCardJson());
+            cardJsonsList.add(card.toOutCardJson());
         }
         try {
             cardsAsJsonString = objectMapper.writeValueAsString(cardJsonsList);

@@ -1,6 +1,7 @@
 package at.technikum.apps.mtcg.entity;
 
 import at.technikum.apps.mtcg.entityJson.CardJson;
+import at.technikum.apps.mtcg.entityJson.outCardJson;
 
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ public class Card {
     private CardType cardType;
     private int damage;
     private Optional<String> owner;
+    private Optional<String> description;
 
     //todo delete constructor
     public Card(String c_Id, String name, int damage, String owner, CardElement cardElement, CardType cardType){
@@ -29,13 +31,14 @@ public class Card {
         this.cardType = CardType.getTypeFromName(name);
         this.cardElement = CardElement.getElementFromName(name);
     }
-    public Card(String c_Id, String name, int damage, String owner){
+    public Card(String c_Id, String name, int damage, String owner, String description){
         this.c_Id = c_Id;
         this.name = name;
         this.damage = damage;
         this.owner = Optional.ofNullable(owner);
         this.cardType = CardType.getTypeFromName(name);
         this.cardElement = CardElement.getElementFromName(name);
+        this.description = Optional.ofNullable(description);
     }
 
     public CardJson toCardJson() {
@@ -43,6 +46,15 @@ public class Card {
         cardJ.setC_Id(this.c_Id);
         cardJ.setName(this.name);
         cardJ.setDamage(this.damage);
+        return cardJ;
+    }
+    public outCardJson toOutCardJson(){
+        outCardJson cardJ = new outCardJson();
+        cardJ.setC_Id(this.c_Id);
+        cardJ.setName(this.name);
+        cardJ.setDamage(this.damage);
+        cardJ.setDescription(this.description.orElse("This is a generic Description."));
+
         return cardJ;
     }
 

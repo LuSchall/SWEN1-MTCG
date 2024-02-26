@@ -33,7 +33,8 @@ public class DarabaseCardRepository implements CardRepository {
                         rs.getString("c_Id"),
                         rs.getString("Name"),
                         rs.getInt("Damage"),
-                        rs.getString("Owner")
+                        rs.getString("Owner"),
+                        rs.getString("Description")
                 );
                 //System.out.println(card.getOwner());
                 return Optional.of(card);
@@ -60,7 +61,8 @@ public class DarabaseCardRepository implements CardRepository {
                         rs.getString("c_Id"),
                         rs.getString("Name"),
                         rs.getInt("Damage"),
-                        rs.getString("Owner")
+                        rs.getString("Owner"),
+                        rs.getString("Description")
                 );
                 cards.add(card);
             }

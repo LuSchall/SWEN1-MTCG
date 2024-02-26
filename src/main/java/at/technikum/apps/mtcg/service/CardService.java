@@ -3,6 +3,7 @@ package at.technikum.apps.mtcg.service;
 import at.technikum.apps.mtcg.entity.Card;
 import at.technikum.apps.mtcg.entity.Package;
 import at.technikum.apps.mtcg.entityJson.CardJson;
+import at.technikum.apps.mtcg.entityJson.outCardJson;
 import at.technikum.apps.mtcg.repository.CardRepository;
 import at.technikum.server.http.Request;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -41,9 +42,9 @@ public class CardService {
 
     public String convertListToJsonString(List<Card> cardsAsList) {
         String cardsAsJsonString;
-        List<CardJson> cardJsonsList = new ArrayList<>();
+        List<outCardJson> cardJsonsList = new ArrayList<>();
         for (Card card : cardsAsList) {
-            cardJsonsList.add(card.toCardJson());
+            cardJsonsList.add(card.toOutCardJson());
         }
         try {
             cardsAsJsonString = objectMapper.writeValueAsString(cardJsonsList);
