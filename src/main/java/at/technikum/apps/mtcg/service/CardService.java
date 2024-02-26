@@ -50,7 +50,6 @@ public class CardService {
         }
         return cardsAsJsonString;
     }
-
     public String convertJsonListToString(List<CardJson> cardJsonsList) {
         String cardsAsJsonString;
         try {

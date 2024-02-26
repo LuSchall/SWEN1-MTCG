@@ -1,8 +1,6 @@
 package at.technikum.apps.mtcg.controller;
 
-import at.technikum.apps.mtcg.service.CardService;
 import at.technikum.apps.mtcg.service.SessionService;
-import at.technikum.apps.mtcg.service.StatService;
 import at.technikum.apps.mtcg.service.UserService;
 import at.technikum.server.http.HttpContentType;
 import at.technikum.server.http.HttpStatus;
@@ -11,18 +9,19 @@ import at.technikum.server.http.Response;
 
 import java.util.Optional;
 
-public class StatController implements Controller{
+public class ScoreboardController implements Controller{
     private final UserService userService;
     private final SessionService sessionService;
-    private static final String statRoute = "/stats";
+    private static final String scoreboardRoute = "/scoreboard";
 
-    public StatController(UserService userService, SessionService sessionService) {
+    public ScoreboardController(UserService userService, SessionService sessionService) {
         this.userService = userService;
         this.sessionService = sessionService;
     }
+
     @Override
     public boolean supports(String route) {
-        return route.equals(statRoute);
+        return route.equals(scoreboardRoute);
     }
 
     @Override
@@ -30,9 +29,8 @@ public class StatController implements Controller{
         Optional<Response> invalidTokenResponse = sessionService.tokenInvalidResponse(request);
         if (invalidTokenResponse.isPresent()) return invalidTokenResponse.get();
         //todo: catch other methods
-        String username = sessionService.getUserFromToken(request).get();
         Response response = new Response();
-        String body = userService.getStatsAsJsonString(username);
+        String body = userService.getScoreboardAsJsonString();
         response.setStatus(HttpStatus.OK);
         response.setContentType(HttpContentType.APPLICATION_JSON);
         response.setBody(body);

@@ -29,9 +29,8 @@ public class Injector {
         PackageRepository packageRepository = new DatabasePackageRepository();
         PackageService packageService = new PackageService(packageRepository, cardService);
         controllerList.add(new PackageController(packageService, sessionService));
-        //stat repo not needed i think
-        //StatService statService = new StatService(userService);
         controllerList.add(new StatController(userService, sessionService));
+        controllerList.add(new ScoreboardController(userService,sessionService));
 
 
 
