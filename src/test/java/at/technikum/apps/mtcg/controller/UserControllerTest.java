@@ -62,6 +62,59 @@ class UserControllerTest {
         assertEquals("User with same username already registered", response.getBody());
     }
 
+    @Test
+    public void testRegisterNotPostMethod() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users");
+        request.setMethod(HttpMethod.GET);
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
+        assertEquals("Bad Request", response.getBody());
+    }
+
+    @Test
+    public void testInvalidRoute() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/name/invalid");
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
+        assertEquals("Bad Request", response.getBody());
+    }
+
+    @Test
+    public void testUnknownUser() throws Exception {
+        // Arrange
+        final var request = new Request();
+        request.setRoute("/users/abc");
+
+
+        Mockito.when(sessionService.tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request))).thenReturn(Optional.empty());
+        Mockito.when(userService.getUserByUsername("abc")).thenReturn(Optional.empty());
+
+        // Act
+        final var response = controller.handle(request);
+
+        // Assert
+        Mockito.verify(sessionService).tokenInvalidResponse(Mockito.eq("abc"), Mockito.same(request));
+        Mockito.verify(userService).getUserByUsername("abc");
+
+        assertEquals(HttpStatus.NOT_FOUND.getCode(), response.getStatusCode());
+        assertEquals(HttpContentType.TEXT_PLAIN.getMimeType(), response.getContentType());
+        assertEquals("User not found.", response.getBody());
+    }
+    
 
 
 

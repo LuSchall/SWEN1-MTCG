@@ -37,34 +37,55 @@ public class UserController implements Controller {
                     response.setBody(HttpStatus.BAD_REQUEST.getMessage());
             }
         }
-        //routing for the specific users
         String[] routeParts = request.getRoute().split("/");
-        String username = routeParts[2];
+        if (routeParts.length == 3) {
+            return getOrUpdate(request, routeParts[2]);
+        }
+        Response response = new Response();
+        response.setStatus(HttpStatus.BAD_REQUEST);
+        response.setContentType(HttpContentType.TEXT_PLAIN);
+        response.setBody(HttpStatus.BAD_REQUEST.getMessage());
+        return response;
+    }
+    private Response getOrUpdate(Request request, String username) {
+        Optional<Response> tokenInvalidResponse = sessionService.tokenInvalidResponse(username, request);
+        if (tokenInvalidResponse.isPresent()) {
+            return tokenInvalidResponse.get();
+        }
+
         // check in DB if user exists
-        if (userService.getUserByUsername(username).isEmpty()) {
+        Optional<User> userOptional = userService.getUserByUsername(username);
+        if (userOptional.isEmpty()) {
             Response response = new Response();
             response.setStatus(HttpStatus.NOT_FOUND);
             response.setContentType(HttpContentType.TEXT_PLAIN);
             response.setBody("User not found.");
+            return response;
         }
         //check access TOKEN here if I have time
         switch (request.getMethod()) {
-            case "GET": return getUserProfile(username, request); // only NAME BIO AND IMAGE
-            case "PUT": return updateUserProfile(username, request); // only NAME BIO AND IMAGE
-            default:
-                Response response = new Response();
-                response.setStatus(HttpStatus.BAD_REQUEST);
-                response.setContentType(HttpContentType.TEXT_PLAIN);
-                response.setBody(HttpStatus.BAD_REQUEST.getMessage());
+            case "GET":
+                return getUserProfile(username, request, userOptional.get()); // only NAME BIO AND IMAGE
+            case "PUT":
+                return updateUserProfile(username, request); // only NAME BIO AND IMAGE
         }
 
         Response response = new Response();
-        response.setStatus(HttpStatus.OK);
+        response.setStatus(HttpStatus.BAD_REQUEST);
         response.setContentType(HttpContentType.TEXT_PLAIN);
-        response.setBody("user controller unhandled");
-
+        response.setBody(HttpStatus.BAD_REQUEST.getMessage());
         return response;
     }
+
+    public Response getUserProfile(String username, Request request, User user) {
+        Response response = new Response();
+        response.setStatus(HttpStatus.OK);
+        response.setContentType(HttpContentType.APPLICATION_JSON);
+        response.setBody(userService.getJsonUserProfileAsString(user));
+        return response;
+    }
+
+
 
     public Response register(Request request) {
         UserJson userJson = userService.getUserJsonFromBody(request.getBody());
